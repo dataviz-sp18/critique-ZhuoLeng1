@@ -1,0 +1,130 @@
+
+Assignment 1
+============
+
+Part 1: Visualization critique (5 points)
+-----------------------------------------
+
+For this assignment, I would like to use a data visualization on [1] Yau use several charts to present his finding on how different income groups spend their money in a year. The study was based on estimates from the 2016 Consumer Expenditure Survey ran by the Bureau of Labor Statistics.
+
+The Overall Spending Chart is the most complicated chart in this study and is a good summary of the main findings. The Y axis represents the percentage breakdowns of each spending category, whereas the bars on the X axis represents the different income groups and the width of each bar represents the average spending of each group. Then the author uses additional charts to further explore the large spending categories, such as housing, food and beverages, transportation and health care. Those charts are very straight forward and easy to understand.
+
+The main finding of this study is pretty intuitive: as income level rises, percentage spending on housing, food and beverage decreases, while percentage spending on personal insurance and education increase. Another interesting finding is that the averages for total spending for the lower income groups are greater than the upper limits of the income levels, which indicates that people in those groups spend more money than they make.
+
+Truthful
+--------
+
+The data source that Yau uses to make these charts is census data and thus, definitely reliable. However, my concern is that the size of each rectangle on the first chart might be misleading to some readers. On this chart, the height of the rectangle represents the percentage spending on a particular category, and the width of the rectangle represents the absolute value of average spending for each group. However, the size of each rectangle does not mean anything in this scenario. So when someone first look at this chart, he/she might intuitively associate the size of each shape to spending and that association is misleading.
+
+Functional
+----------
+
+Since the objective of these chart is to compare spending behavior among different income groups, I believe this visualization is functional because the choice of stacked bar chart makes the comparison intuitive and easy to interpret. This visual of this chart is also good: each spending category is separated by different colors, and the length of rectangle is corresponding to a certain attribute. For the spending category charts, the author divided the bar into small squares and use each square to represent the same amount of spend. In this way, the visualization is more accurate and the comparison is more standardized. For example, we can directly compare the size of the bars from food and beverages category with the size of the bars under transportation. Besides, I think this visualization is showing the right amount of information, which would not overwhelm the audience. So in conclusion, I believe this visualization is functional because it effectively support the story the author is trying to tell.
+
+Beautiful
+---------
+
+Whether a visualization is beautiful can be very subjective and depends on different people aesthetic. To me, I found these charts beautiful because they are presented in a clear and simple way. The colors on the overall chart match with the spending categories bar charts below, which makes the charts easy to follow. Besides, this visualization doesn???t provide any junk information, which help the audience focus on the key information the author trying to convey.
+\#\# Insightful
+
+I would say that I find these charts insightful and some insights from this visualization are very interesting. For example, the chart shows that people with higher incomes have a lot more money to save after they pay for living expenses, percentage-wise and in average dollars. The percentage wise difference may not be that obvious, but the absolute value is dramatically different from each other. This information is clearly demonstrated through the comparison between the overall chart and the personal insurance chart. Overall, the charts, to some extent, effectively communicate the insights from the data.
+
+Enlightening
+------------
+
+Although this topic is important for sociology studies and provides good understanding on peoples spending behavior, I wouldn not say that this visualization is very enlightening. Most of the insights form this visualization is intuitive and common sense. Most of the spending categories grow at a similar rate as the total income level grow, with just a few exceptions. None of the findings from this visualization is surprising, but the charts do provide the audience with a clear and simple way to dissect the data and look at each category separately.
+
+Part 2: `ggplot2` and the grammar of graphics (5 points)
+--------------------------------------------------------
+
+``` r
+library(tidyverse)
+```
+
+    ## Loading tidyverse: ggplot2
+    ## Loading tidyverse: tibble
+    ## Loading tidyverse: tidyr
+    ## Loading tidyverse: readr
+    ## Loading tidyverse: purrr
+    ## Loading tidyverse: dplyr
+
+    ## Conflicts with tidy packages ----------------------------------------------
+
+    ## filter(): dplyr, stats
+    ## lag():    dplyr, stats
+
+``` r
+library(knitr)
+library(broom)
+library(stringr)
+library(lubridate)
+```
+
+    ## 
+    ## Attaching package: 'lubridate'
+
+    ## The following object is masked from 'package:base':
+    ## 
+    ##     date
+
+``` r
+library(ggrepel)
+library(gridExtra)
+```
+
+    ## 
+    ## Attaching package: 'gridExtra'
+
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     combine
+
+``` r
+options(digits = 3)
+set.seed(1234)
+
+theme_set(theme_gray(base_size = 18))
+
+# load package and data
+library(ggplot2)
+data(mpg, package="ggplot2")
+
+mpg_select <- mpg[mpg$manufacturer %in% c("audi","ford", "honda", "jeep","nissan"), ]
+
+# Scatterplot
+theme_set(theme_bw())  # pre-set the bw theme.
+g <- ggplot(mpg_select, aes(displ, hwy)) + 
+  labs(subtitle="mpg: Displacement vs City Mileage",
+       title="Bubble chart")
+
+g + geom_jitter(aes(col=manufacturer, size=hwy))+ggtitle("highway mileage vs displacement by various car manufacturers") + xlab('displacement') + ylab('highway mileage')
+```
+
+![](critique-grammar_files/figure-markdown_github/unnamed-chunk-1-1.png)
+
+What is the story?
+------------------
+
+From the bubble scatter plot above, we can understand a story about MPG data: highway mileage vs. displacement by various car manufacturers. The x axes is displacement, which means engine displacement, in litres. The y axes is hwy which means highway mileage. The bubble plot has different size. The larger the bubble, the higher highway mileage of the car. In addition to that, the car manufacturer models are classified by different colors. Red color represents audi model, kale represents ford model, green represents honda, blue represents jeep model and purple represents nissan model. This graph indicates that honda car model has the lowest desplacement, but can run longest highway mileage. Audi displacement is different base on various car models, range from 1.5 to 4 in litres. At the same time Audi can run average 28 highway mileage, which is also good at performance. Nissan and jeep manufacturers have different car models, there mileage range from 2.5-5.5 and 3-6 in litres respectively. Compare with Jeep, Nissan has better performance on highway mileage range from 15-35. Ford car model has lowest displacement compared with other car models, and it also has lowest highway mileage among others.
+
+Why did you select this graphical form?
+---------------------------------------
+
+For this plot, I combine bubble plot with scatter plot. One of the main story of my plot is to compare the relationship between highway mileage with displacement in litres. So for this purpose, I select scatter plot with different color to represent different car models to plot the relationship of x and y. In order to identify the highway-mileage at the same time, I select bubble plot and use 5 different size to represents 15,20,25,30,35 in highway mileage. All these different graphical form make my plot more readable, attractive, interpretable and beautiful.
+
+Why did you use these specific channels to encode the data (e.g. spatial position, size, color, scale)?
+-------------------------------------------------------------------------------------------------------
+
+Since my plot want to figure out the relationship of highway mileage vs.displacment by different car manufacturers, so when I use different color to represent different car models could make the plot more easy to read. When read my plot, it's very easy to find that honda is clustered at upper left corner, which indicates it has low displacement with high mileage. Also, the yellow scatter is clustered around lower right corner, which represents ford has higher displacement with lower highway mileage. In addition, I use size as my another specific channels to encode the data.I use 5 different size for my bubble plot to represents 15,20,25,30,35 in highway mileage. The smaller the bubble is, the lower highway mileage car can run. From my plot, we can get the result that jeep contains smaller bubble plot than others, which means jeep car model is really low in mileage.
+
+Why did you make any other data transformations?
+------------------------------------------------
+
+The only data transformations I use before I plot my graph is selecting my target car manufactuer from mpg dataset. This step is very important because it can identify my target variables that I want to put into comparision. I only select the points that are one of audi, ford, honda, jeep and nissan, and put them into production. The result turns to be good because these 5 classes are clearly clustered at different position in our bubble plot, which is much easier for us to compare and interprate.
+
+How do these decisions facilitate effective communication?
+----------------------------------------------------------
+
+These decisions I make for sure can facilitate effective communication. For this plot, I select bubble plot and combine it with scatter plot, then I use size, color, data transformations, all these specific channels to encode the data in order to improve interpretation and communication of my graph. To combine bubble plot with scatter plot, I describe my main story: compare the relationship between highway mileage with displacement in litres by different car model. I use scatter plot with different color to represent different car manufacturer to plot the relationship of x and y. Also, in order to identify the highway-mileage at the same time, I select bubble plot and use 5 different size to represents different level of mileage. All these different graphical form make my plot more readable, beautiful. Other than that, I use different color to represent different car models could let the audiences more easy to understand my graph. For example, when they read my plot, they could easily find that honda is clustered at upper left corner, which indicates it has low displacement with high mileage. I use size as my another specific channels to encode the data in order to facilitate effective communication with audience. For example, from my plot, the audience of my graph can get the result that jeep contains smaller bubble plot than others, which means jeep car model is really low in mileage.
+
+[1] How Different Income Groups Spend Money *How Different Income Groups Spend Money <http://flowingdata.com/2018/02/08/how-different-income-groups-spend-money/> * by Nathan Yau.
